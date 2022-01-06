@@ -17,8 +17,8 @@ sp-core = { version = "4.0.0", default-features = false }
 sp-arithmetic = { version = "4.0.0", default-features = false }
 
 # frame dependencies
-frame-support = { version = "3.0.0", default-features = false }
-frame-system = { version = "3.0.0", default-features = false }
+frame-support = { version = "4.0.0", default-features = false }
+frame-system = { version = "4.0.0", default-features = false }
 
 chainbridge = { path = "../chainbridge" , default-features = false}
 example-erc721 = { path = "../example-erc721", default-features = false }
