@@ -16,8 +16,7 @@ use sp_core::U256;
 use sp_runtime::traits::{AccountIdConversion, Dispatchable};
 use sp_runtime::RuntimeDebug;
 use sp_std::prelude::*;
-use scale_info::{TypeInfo, Type, Path, TypeParameter};
-use scale_info::build::Fields;
+use scale_info::TypeInfo;
 
 use codec::{Decode, Encode, EncodeLike};
 
@@ -43,14 +42,14 @@ pub fn derive_resource_id(chain: u8, id: &[u8]) -> ResourceId {
     return r_id;
 }
 
-#[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug)]
+#[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
 pub enum ProposalStatus {
     Initiated,
     Approved,
     Rejected,
 }
 
-#[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug)]
+#[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
 pub struct ProposalVotes<AccountId, BlockNumber> {
     pub votes_for: Vec<AccountId>,
     pub votes_against: Vec<AccountId>,
@@ -97,25 +96,6 @@ impl<AccountId, BlockNumber: Default> Default for ProposalVotes<AccountId, Block
             status: ProposalStatus::Initiated,
             expiry: BlockNumber::default(),
         }
-    }
-}
-
-impl<AccountId, BlockNumber> TypeInfo for ProposalVotes<AccountId, BlockNumber> 
-where
-    AccountId: TypeInfo + 'static,
-    BlockNumber: TypeInfo + 'static, {
-    type Identity = Self;
-    
-    fn type_info() -> Type {
-        Type::builder()
-            .path(Path::new("ProposalVotes", module_path!()))
-            .type_params(vec![TypeParameter::new::("AccountId"), TypeParameter::new::("BlockNumber")])
-            .composite(Fields::named()
-                .field(|f| f.ty::<Vec<AccountId>>().name("votes_for").type_name("Vec<AccountId>"))
-                .field(|f| f.ty::<Vec<AccountId>>().name("votes_against").type_name("Vec<AccountId>"))
-                .field(|f| f.ty::<ProposalStatus>().name("status").type_name("ProposalStatus"))
-                .field(|f| f.ty::<BlockNumber>().name("expiry").type_name("BlockNumber"))
-            )
     }
 }
 
