@@ -17,7 +17,7 @@ use sp_runtime::traits::{AccountIdConversion, Dispatchable};
 use sp_runtime::RuntimeDebug;
 use sp_std::prelude::*;
 use scale_info::{TypeInfo, Type, Path, TypeParameter};
-use scale_info::build::Fields
+use scale_info::build::Fields;
 
 use codec::{Decode, Encode, EncodeLike};
 
