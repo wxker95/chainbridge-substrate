@@ -2,7 +2,6 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use chainbridge as bridge;
-use example_erc721 as erc721;
 use frame_support::traits::{Currency, EnsureOrigin, ExistenceRequirement::AllowDeath, Get};
 use frame_support::{decl_error, decl_event, decl_module, dispatch::DispatchResult, ensure};
 use frame_system::{self as system, ensure_signed};
@@ -18,7 +17,7 @@ type ResourceId = bridge::ResourceId;
 type BalanceOf<T> =
     <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
 
-pub trait Config: system::Config + bridge::Config + erc721::Config {
+pub trait Config: system::Config + bridge::Config {
     type Event: From<Event<Self>> + Into<<Self as frame_system::Config>::Event>;
     /// Specifies the origin check provided by the bridge for calls that can only be called by the bridge pallet
     type BridgeOrigin: EnsureOrigin<Self::Origin, Success = Self::AccountId>;
@@ -78,23 +77,6 @@ decl_module! {
 
             let resource_id = T::NativeTokenId::get();
             <bridge::Module<T>>::transfer_fungible(dest_id, resource_id, recipient, U256::from(amount.saturated_into::<u128>()))
-        }
-
-        /// Transfer a non-fungible token (erc721) to a (whitelisted) destination chain.
-        #[weight = 195_000_000]
-        pub fn transfer_erc721(origin, recipient: Vec<u8>, token_id: U256, dest_id: bridge::ChainId) -> DispatchResult {
-            let source = ensure_signed(origin)?;
-            ensure!(<bridge::Module<T>>::chain_whitelisted(dest_id), Error::<T>::InvalidTransfer);
-            match <erc721::Module<T>>::tokens(&token_id) {
-                Some(token) => {
-                    <erc721::Module<T>>::burn_token(source, token_id)?;
-                    let resource_id = T::Erc721Id::get();
-                    let tid: &mut [u8] = &mut[0; 32];
-                    token_id.to_big_endian(tid);
-                    <bridge::Module<T>>::transfer_nonfungible(dest_id, resource_id, tid.to_vec(), recipient, token.metadata)
-                }
-                None => Err(Error::<T>::InvalidTransfer)?
-            }
         }
 
         //
