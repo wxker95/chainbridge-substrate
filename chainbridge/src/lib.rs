@@ -49,7 +49,7 @@ pub enum ProposalStatus {
     Rejected,
 }
 
-#[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
+#[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug)]
 pub struct ProposalVotes<AccountId, BlockNumber> {
     pub votes_for: Vec<AccountId>,
     pub votes_against: Vec<AccountId>,
@@ -97,6 +97,24 @@ impl<AccountId, BlockNumber: Default> Default for ProposalVotes<AccountId, Block
             expiry: BlockNumber::default(),
         }
     }
+}
+
+impl<AccountId, BlockNumber> TypeInfo for ProposalVotes<AccountId, BlockNumber> 
+where
+    T: TypeInfo + 'static, {
+    type Identity = Self;
+    
+    fn type_info() -> Type {
+        Type::builder()
+            .path(Path::new("ProposalVotes", module_path!()))
+            .type_params(vec![MetaType::new::<AccountId>(), MetaType::new::<BlockNumber>()])
+            .composite(Fields::named()
+                .field(|f| f.ty::<Vec<AccountId>>().name("votes_for").type_name("Vec<AccountId>"))
+                .field(|f| f.ty::<Vec<AccountId>>().name("votes_against").type_name("Vec<AccountId>"))
+                .field(|f| f.ty::<ProposalStatus>().name("status").type_name("ProposalStatus"))
+                .field(|f| f.ty::<BlockNumber>().name("expiry").type_name("BlockNumber"))
+            )
+    };
 }
 
 pub trait Config: system::Config {
