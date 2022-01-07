@@ -14,9 +14,9 @@ use frame_support::{
 use frame_system::{self as system, ensure_root, ensure_signed};
 use sp_core::U256;
 use sp_runtime::traits::{AccountIdConversion, Dispatchable};
-use sp_runtime::{RuntimeDebug};
+use sp_runtime::RuntimeDebug;
 use sp_std::prelude::*;
-use scale_info::TypeInfo;
+use scale_info::{TypeInfo, Type};
 
 use codec::{Decode, Encode, EncodeLike};
 
@@ -101,7 +101,8 @@ impl<AccountId, BlockNumber: Default> Default for ProposalVotes<AccountId, Block
 
 impl<AccountId, BlockNumber> TypeInfo for ProposalVotes<AccountId, BlockNumber> 
 where
-    T: TypeInfo + 'static, {
+    AccountId: TypeInfo + 'static,
+    BlockNumber: TypeInfo + 'static, {
     type Identity = Self;
     
     fn type_info() -> Type {
@@ -114,7 +115,7 @@ where
                 .field(|f| f.ty::<ProposalStatus>().name("status").type_name("ProposalStatus"))
                 .field(|f| f.ty::<BlockNumber>().name("expiry").type_name("BlockNumber"))
             )
-    };
+    }
 }
 
 pub trait Config: system::Config {
