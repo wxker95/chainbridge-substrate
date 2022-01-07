@@ -16,7 +16,7 @@ use sp_core::U256;
 use sp_runtime::traits::{AccountIdConversion, Dispatchable};
 use sp_runtime::RuntimeDebug;
 use sp_std::prelude::*;
-use scale_info::{TypeInfo, Type, Path, MetaType, Field};
+use scale_info::{TypeInfo, Type, Path, TypeParameter, Field};
 
 use codec::{Decode, Encode, EncodeLike};
 
@@ -108,7 +108,7 @@ where
     fn type_info() -> Type {
         Type::builder()
             .path(Path::new("ProposalVotes", module_path!()))
-            .type_params(vec![MetaType::new::<AccountId, BlockNumber>()])
+            .type_params(vec![TypeParameter::new::<AccountId>(), TypeParameter::new::<BlockNumber>()])
             .composite(Fields::named()
                 .field(|f| f.ty::<Vec<AccountId>>().name("votes_for").type_name("Vec<AccountId>"))
                 .field(|f| f.ty::<Vec<AccountId>>().name("votes_against").type_name("Vec<AccountId>"))
