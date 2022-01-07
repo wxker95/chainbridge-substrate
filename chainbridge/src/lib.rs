@@ -8,12 +8,13 @@ use frame_support::{
     traits::{EnsureOrigin, Get},
     weights::{GetDispatchInfo, Pays},
     Parameter,
+    PalletId,
 };
 
 use frame_system::{self as system, ensure_root, ensure_signed};
 use sp_core::U256;
 use sp_runtime::traits::{AccountIdConversion, Dispatchable};
-use sp_runtime::{PalletId, RuntimeDebug};
+use sp_runtime::{RuntimeDebug};
 use sp_std::prelude::*;
 
 use codec::{Decode, Encode, EncodeLike};
