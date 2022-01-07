@@ -28,7 +28,6 @@ pub trait Config: system::Config + bridge::Config {
     /// Ids can be defined by the runtime and passed in, perhaps from blake2b_128 hashes.
     type HashId: Get<ResourceId>;
     type NativeTokenId: Get<ResourceId>;
-    type Erc721Id: Get<ResourceId>;
 }
 
 decl_event! {
