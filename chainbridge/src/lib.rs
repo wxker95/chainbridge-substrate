@@ -48,7 +48,7 @@ pub enum ProposalStatus {
     Rejected,
 }
 
-#[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug)]
+#[derive(PartialEq, Eq, Clone, Encode, Decode, RuntimeDebug, TypeInfo)]
 pub struct ProposalVotes<AccountId, BlockNumber> {
     pub votes_for: Vec<AccountId>,
     pub votes_against: Vec<AccountId>,
