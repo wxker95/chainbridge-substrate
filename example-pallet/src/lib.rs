@@ -48,7 +48,6 @@ decl_module! {
     pub struct Module<T: Config> for enum Call where origin: T::Origin {
         const HashId: ResourceId = T::HashId::get();
         const NativeTokenId: ResourceId = T::NativeTokenId::get();
-        const Erc721Id: ResourceId = T::Erc721Id::get();
 
         fn deposit_event() = default;
 
