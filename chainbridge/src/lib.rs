@@ -16,6 +16,7 @@ use sp_core::U256;
 use sp_runtime::traits::{AccountIdConversion, Dispatchable};
 use sp_runtime::{RuntimeDebug};
 use sp_std::prelude::*;
+use scale_info::TypeInfo;
 
 use codec::{Decode, Encode, EncodeLike};
 
